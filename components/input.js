@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, InputNumber, Form } from 'antd';
+import { Col, InputNumber, Form, Input, Select, DatePicker } from 'antd';
 
 /**
  * Custom Input
  * Antd Input excentsion
- * author: Martin Moreira
  * */
-const Input = ({
+const InputWrapper = ({
   name,
   form,
   label,
@@ -20,6 +19,7 @@ const Input = ({
   min,
   max,
   style,
+  type,
 }) => {
   let itemsRules = {};
   itemsRules.required = required;
@@ -45,19 +45,24 @@ const Input = ({
   if (parser) {
     propsPop.parser = parser;
   }
+  const number = <InputNumber {...propsPop} style={style} />;
+  const date = <DatePicker {...propsPop} style={style} />;
+  const area = <Input.TextArea {...propsPop} style={style} />;
+  const select = <Select {...propsPop} style={style} />;
+  const input = <Input {...propsPop} style={style} />;
   return (
     <Col span={8}>
       <Form.Item label={label}>
         {form.getFieldDecorator(name, {
           initialValue: initialValue,
           rules,
-        })(<InputNumber {...propsPop} style={style} />)}
+        })({ render })}
       </Form.Item>
     </Col>
   );
 };
 
-Input.propTypes = {
+InputWrapper.propTypes = {
   name: PropTypes.string,
   form: PropTypes.object,
   label: PropTypes.string,
@@ -73,9 +78,9 @@ Input.propTypes = {
   style: PropTypes.object,
 };
 
-Input.defaultProps = {
+InputWrapper.defaultProps = {
   name: 'TEST',
   label: 'Change Properties',
 };
 
-export default Input;
+export default InputWrapper;
