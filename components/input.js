@@ -36,26 +36,23 @@ const Input = ({
   if (formatter) {
     propsPop.formatter = formatter;
   }
-  if (style) {
-    propsPop.formatter = style;
-  }
   if (min) {
-    propsPop.formatter = min;
+    propsPop.min = min;
   }
   if (max) {
-    propsPop.formatter = max;
+    propsPop.max = max;
   }
   if (parser) {
-    propsPop.formatter = parser;
+    propsPop.parser = parser;
   }
   return (
     <Col span={8}>
-      <Form.FormItem label={label}>
+      <Form.Item label={label}>
         {form.getFieldDecorator(name, {
           initialValue: initialValue,
           rules,
-        })(<InputNumber propsPop />)}
-      </Form.FormItem>
+        })(<InputNumber {...propsPop} style={style} />)}
+      </Form.Item>
     </Col>
   );
 };
@@ -66,7 +63,7 @@ Input.propTypes = {
   label: PropTypes.string,
   required: PropTypes.bool,
   validator: PropTypes.func,
-  initialValue: PropTypes.object,
+  initialValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   message: PropTypes.string,
 
   formatter: PropTypes.func,
@@ -78,7 +75,7 @@ Input.propTypes = {
 
 Input.defaultProps = {
   name: 'TEST',
-  label: 'Default Properties',
+  label: 'Change Properties',
 };
 
 export default Input;
