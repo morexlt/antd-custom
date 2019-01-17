@@ -22,6 +22,7 @@ const InputWrapper = ({
   type,
   format,
   span,
+  options,
 }) => {
   let itemsRules = {};
   itemsRules.required = required;
@@ -47,27 +48,28 @@ const InputWrapper = ({
   if (parser) {
     propsPop.parser = parser;
   }
-  const number = <InputNumber {...propsPop} style={style} />;
-  const date = <DatePicker {...propsPop} format={format} style={style} />;
-  const area = <Input.TextArea {...propsPop} style={style} />;
-  const select = <Select {...propsPop} style={style} />;
-  const input = <Input {...propsPop} style={style} />;
   let render;
   switch (type) {
     case 'number':
-      render = number;
+      render = <InputNumber {...propsPop} style={style} />;
       break;
     case 'date':
-      render = date;
+      render = <DatePicker {...propsPop} format={format} style={style} />;
       break;
     case 'area':
-      render = area;
+      render = <Input.TextArea {...propsPop} style={style} />;
       break;
     case 'select':
-      render = select;
+      render = (
+        <Select {...propsPop} style={style}>
+          {options.map(opcion => (
+            <Select.Option key={opcion}>{opcion}</Select.Option>
+          ))}
+        </Select>
+      );
       break;
     case 'input':
-      render = input;
+      render = <Input {...propsPop} style={style} />;
       break;
   }
   return (
@@ -101,6 +103,9 @@ InputWrapper.propTypes = {
 
   //DatePicker
   format: PropTypes.string,
+
+  //Select
+  options: PropTypes.array,
 };
 
 InputWrapper.defaultProps = {
@@ -108,6 +113,7 @@ InputWrapper.defaultProps = {
   label: 'Change Properties',
   format: 'DD/MM/YYYY',
   span: 8,
+  options: [],
 };
 
 export default InputWrapper;
