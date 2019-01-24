@@ -1,6 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, InputNumber, Form, Input, Select, DatePicker } from 'antd';
+import {
+  Col,
+  InputNumber,
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  Tooltip,
+  Icon,
+} from 'antd';
 
 /**
  * Custom Input
@@ -8,6 +17,7 @@ import { Col, InputNumber, Form, Input, Select, DatePicker } from 'antd';
  * */
 const InputWrapper = ({
   name,
+  placeholder,
   form,
   label,
   required,
@@ -20,9 +30,12 @@ const InputWrapper = ({
   max,
   style,
   type,
+  subtype,
   format,
   span,
   options,
+  showSearch,
+  tooltip,
 }) => {
   let itemsRules = {};
   itemsRules.required = required;
@@ -36,6 +49,9 @@ const InputWrapper = ({
   const rules = [itemsRules];
 
   let propsPop = {};
+  if (placeholder) {
+    propsPop.placeholder = placeholder;
+  }
   if (formatter) {
     propsPop.formatter = formatter;
   }
@@ -48,13 +64,30 @@ const InputWrapper = ({
   if (parser) {
     propsPop.parser = parser;
   }
+  if (showSearch) {
+    propsPop.showSearch = showSearch;
+  }
   let render;
   switch (type) {
     case 'number':
       render = <InputNumber {...propsPop} style={style} />;
       break;
     case 'date':
-      render = <DatePicker {...propsPop} format={format} style={style} />;
+      switch (subtype) {
+        case 'month':
+          render = (
+            <DatePicker.MonthPicker
+              {...propsPop}
+              format={format}
+              style={style}
+            />
+          );
+          break;
+        default:
+          render = <DatePicker {...propsPop} format={format} style={style} />;
+          break;
+      }
+
       break;
     case 'area':
       render = <Input.TextArea {...propsPop} style={style} />;
@@ -72,6 +105,16 @@ const InputWrapper = ({
       render = <Input {...propsPop} style={style} />;
       break;
   }
+  if (tooltip) {
+    label = (
+      <span>
+        {label + ' '}
+        <Tooltip title={tooltip}>
+          <Icon type="question-circle-o" />
+        </Tooltip>
+      </span>
+    );
+  }
   return (
     <Col span={span}>
       <Form.Item label={label}>
@@ -85,6 +128,8 @@ const InputWrapper = ({
 };
 
 InputWrapper.propTypes = {
+  placeholder: PropTypes.string,
+  tooltip: PropTypes.string,
   span: PropTypes.number,
   type: PropTypes.string,
   name: PropTypes.string,
@@ -106,6 +151,7 @@ InputWrapper.propTypes = {
 
   //Select
   options: PropTypes.array,
+  showSearch: PropTypes.bool,
 };
 
 InputWrapper.defaultProps = {
