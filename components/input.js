@@ -36,6 +36,7 @@ const InputWrapper = ({
   options,
   showSearch,
   tooltip,
+  optionAttribute,
 }) => {
   let itemsRules = {};
   itemsRules.required = required;
@@ -96,7 +97,9 @@ const InputWrapper = ({
       render = (
         <Select {...propsPop} style={style}>
           {options.map(opcion => (
-            <Select.Option key={opcion}>{opcion}</Select.Option>
+            <Select.Option key={optionAttribute ? opcion.id : opcion}>
+              {optionAttribute ? opcion[optionAttribute] : opcion}
+            </Select.Option>
           ))}
         </Select>
       );
